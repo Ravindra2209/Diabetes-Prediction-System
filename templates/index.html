@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diabetes Prediction Model</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>Diabetes Prediction Model</h1>
+</header>
+
+<section>
+    <h2>Diabetes Prediction</h2>
+
+    <form id="predictionForm" class="form-grid">
+
+        <div class="form-row">
+            <label>Age</label>
+            <input type="number" required>
+        </div>
+
+        <div class="form-row">
+            <label>Gender (0 = Female, 1 = Male)</label>
+            <input type="number" required>
+        </div>
+
+        <div class="form-row">
+            <label>BMI</label>
+            <input type="number" step="0.1" required>
+        </div>
+
+        <div class="form-row">
+            <label>SBP (Systolic BP)</label>
+            <input type="number" required>
+        </div>
+
+        <div class="form-row">
+            <label>DBP (Diastolic BP)</label>
+            <input type="number" required>
+        </div>
+
+        <div class="form-row">
+            <label>FPG</label>
+            <input type="number" step="0.1" required>
+        </div>
+
+        <div class="form-row">
+            <label>FFPG</label>
+            <input type="number" step="0.1" required>
+        </div>
+
+        <div class="form-row">
+            <label>Cholesterol</label>
+            <input type="number" step="0.1" required>
+        </div>
+
+        <div class="form-row">
+            <label>Triglycerides</label>
+            <input type="number" step="0.1" required>
+        </div>
+
+        <div class="form-row">
+            <label>HDL</label>
+            <input type="number" step="0.1" required>
+        </div>
+
+        <div class="form-row">
+            <label>LDL</label>
+            <input type="number" step="0.1" required>
+        </div>
+
+        <div class="form-row">
+            <label>Smoking (0 = No, 1 = Yes)</label>
+            <input type="number" required>
+        </div>
+
+        <div class="form-row">
+            <label>Drinking (0 = No, 1 = Yes)</label>
+            <input type="number" required>
+        </div>
+
+        <div class="form-row">
+            <label>Family History (0 = No, 1 = Yes)</label>
+            <input type="number" required>
+        </div>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    <p id="result"></p>
+
+</section>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
