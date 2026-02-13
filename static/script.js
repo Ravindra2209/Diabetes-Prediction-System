@@ -1,7 +1,8 @@
-document.getElementById("predictionForm").addEventListener("submit", async function (e) {
+document.getElementById("predictionForm").addEventListener("submit", async function(e) {
+
     e.preventDefault();
 
-    const inputs = document.querySelectorAll("#predictionForm input");
+    const inputs = document.querySelectorAll("input");
 
     const data = {
         age: Number(inputs[0].value),
@@ -28,8 +29,8 @@ document.getElementById("predictionForm").addEventListener("submit", async funct
 
     const result = await response.json();
 
-    document.getElementById("result").innerHTML = `
-        <p><b>ML Probability of Diabetes:</b> ${result.probability}</p>
-        <p><b>Final Diagnosis:</b> ${result.diagnosis}</p>
-    `;
+    document.getElementById("result").innerHTML =
+        `<h3>ML Probability of Diabetes: ${result.probability}</h3>
+         <h3>Final Diagnosis: ${result.diagnosis}</h3>
+         <img src="data:image/png;base64,${result.plot}" style="margin-top:20px; max-width:600px;">`;
 });
