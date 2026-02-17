@@ -21,16 +21,29 @@ document.getElementById("predictionForm").addEventListener("submit", async funct
         family_history: Number(inputs[13].value)
     };
 
-    const response = await fetch("/predict", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    });
+    try {
+        const response = await fetch("/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
 
-    const result = await response.json();
+        const result = await response.json();
 
-    document.getElementById("result").innerHTML =
-        `<h3>ML Probability of Diabetes: ${result.probability}</h3>
-         <h3>Final Diagnosis: ${result.diagnosis}</h3>
-         <img src="data:image/png;base64,${result.plot}" style="margin-top:20px; max-width:600px;">`;
+        if (!response.ok) {
+            document.getElementById("result").innerHTML =
+                `<h3 style="color:red;">${result.error}</h3>`;
+            return;
+        }
+
+        document.getElementById("result").innerHTML =
+            `<h3>ML Probability of Diabetes: ${result.probability}</h3>
+             <h3>Final Diagnosis: ${result.diagnosis}</h3>
+             <img src="data:image/png;base64,${result.plot}" 
+             style="margin-top:20px; max-width:600px;">`;
+
+    } catch (error) {
+        document.getElementById("result").innerHTML =
+            `<h3 style="color:red;">Server Error. Please try again.</h3>`;
+    }
 });
