@@ -11,16 +11,66 @@ app = Flask(__name__)
 
 model = joblib.load("diabetes_model.pkl")
 
+
+# ------------------ INPUT VALIDATION ------------------
+
+def validate_input(data):
+
+    constraints = {
+        "age": (1, 100),
+        "gender": (0, 1),
+        "bmi": (10, 50),
+        "sbp": (80, 200),
+        "dbp": (40, 130),
+        "fpg": (2, 20),
+        "ffpg": (2, 20),
+        "chol": (1, 15),
+        "tri": (0.1, 15),
+        "hdl": (0.1, 5),
+        "ldl": (0.1, 10),
+        "smoking": (0, 1),
+        "drinking": (0, 1),
+        "family_history": (0, 1)
+    }
+
+    for key, (min_val, max_val) in constraints.items():
+        if key not in data:
+            return f"{key} is missing."
+
+        if not (min_val <= float(data[key]) <= max_val):
+            return f"{key.upper()} must be between {min_val} and {max_val}."
+
+    return None
+
+
 @app.route("/")
 def home():
     return render_template("index.html")
 
+
 @app.route("/predict", methods=["POST"])
 def predict():
+
     data = request.get_json()
 
+    # ---- VALIDATE ----
+    error = validate_input(data)
+    if error:
+        return jsonify({"error": error}), 400
+
+    # ---- ML Prediction ----
+    features = np.array([[ 
+        data["age"], data["gender"], data["bmi"], data["sbp"],
+        data["dbp"], data["fpg"], data["ffpg"], data["chol"],
+        data["tri"], data["hdl"], data["ldl"],
+        data["smoking"], data["drinking"], data["family_history"]
+    ]])
+
+    prob = model.predict_proba(features)[0][1]
+    diagnosis = "Diabetes Detected" if prob >= 0.5 else "No Diabetes Detected"
+
+    # ---- Clinical Plot ----
     values = {
-        "Age": data["age"],
         "BMI": data["bmi"],
         "SBP": data["sbp"],
         "DBP": data["dbp"],
@@ -32,18 +82,6 @@ def predict():
         "LDL": data["ldl"]
     }
 
-    # ML Prediction
-    features = np.array([[ 
-        data["age"], data["gender"], data["bmi"], data["sbp"],
-        data["dbp"], data["fpg"], data["ffpg"], data["chol"],
-        data["tri"], data["hdl"], data["ldl"],
-        data["smoking"], data["drinking"], data["family_history"]
-    ]])
-
-    prob = model.predict_proba(features)[0][1]
-    diagnosis = "Diabetes Detected" if prob >= 0.5 else "No Diabetes Detected"
-
-    # ---- Clinical Cutoffs ----
     cutoffs = {
         "BMI": 25,
         "SBP": 130,
@@ -55,9 +93,7 @@ def predict():
         "LDL": 2.6
     }
 
-    protective_cutoffs = {
-        "HDL": 1.55
-    }
+    protective_cutoffs = {"HDL": 1.55}
 
     features_plot = []
     deviations = []
@@ -72,9 +108,7 @@ def predict():
             else:
                 deviations.append(cutoff - values[key])
                 colors.append("red")
-            features_plot.append(key)
-
-        elif key in cutoffs:
+        else:
             cutoff = cutoffs[key]
             if values[key] >= cutoff:
                 deviations.append(values[key] - cutoff)
@@ -82,15 +116,14 @@ def predict():
             else:
                 deviations.append(-(cutoff - values[key]))
                 colors.append("blue")
-            features_plot.append(key)
 
-    # Sort by strongest deviation
+        features_plot.append(key)
+
     sorted_data = sorted(zip(features_plot, deviations, colors),
                          key=lambda x: abs(x[1]), reverse=True)
 
     features_plot, deviations, colors = zip(*sorted_data)
 
-    # ---- Plot ----
     plt.figure(figsize=(6,4))
     plt.barh(features_plot, deviations, color=colors)
     plt.axvline(0)
@@ -110,6 +143,7 @@ def predict():
         "diagnosis": diagnosis,
         "plot": plot_url
     })
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=10000)
