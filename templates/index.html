@@ -18,72 +18,72 @@
 
         <div class="form-row">
             <label>Age</label>
-            <input type="number" required>
+            <input type="number" min="1" max="100" required>
         </div>
 
         <div class="form-row">
             <label>Gender (0 = Female, 1 = Male)</label>
-            <input type="number" required>
+            <input type="number" min="0" max="1" required>
         </div>
 
         <div class="form-row">
             <label>BMI</label>
-            <input type="number" step="0.1" required>
+            <input type="number" min="10" max="50" step="0.1" required>
         </div>
 
         <div class="form-row">
-            <label>SBP (Systolic BP)</label>
-            <input type="number" required>
+            <label>SBP</label>
+            <input type="number" min="80" max="200" required>
         </div>
 
         <div class="form-row">
-            <label>DBP (Diastolic BP)</label>
-            <input type="number" required>
+            <label>DBP</label>
+            <input type="number" min="40" max="130" required>
         </div>
 
         <div class="form-row">
             <label>FPG</label>
-            <input type="number" step="0.1" required>
+            <input type="number" min="2" max="20" step="0.1" required>
         </div>
 
         <div class="form-row">
             <label>FFPG</label>
-            <input type="number" step="0.1" required>
+            <input type="number" min="2" max="20" step="0.1" required>
         </div>
 
         <div class="form-row">
             <label>Cholesterol</label>
-            <input type="number" step="0.1" required>
+            <input type="number" min="1" max="15" step="0.1" required>
         </div>
 
         <div class="form-row">
             <label>Triglycerides</label>
-            <input type="number" step="0.1" required>
+            <input type="number" min="0.1" max="15" step="0.1" required>
         </div>
 
         <div class="form-row">
             <label>HDL</label>
-            <input type="number" step="0.1" required>
+            <input type="number" min="0.1" max="5" step="0.1" required>
         </div>
 
         <div class="form-row">
             <label>LDL</label>
-            <input type="number" step="0.1" required>
+            <input type="number" min="0.1" max="10" step="0.1" required>
         </div>
 
         <div class="form-row">
             <label>Smoking (0 = No, 1 = Yes)</label>
-            <input type="number" required>
+            <input type="number" min="0" max="1" required>
         </div>
 
         <div class="form-row">
             <label>Drinking (0 = No, 1 = Yes)</label>
-            <input type="number" required>
+            <input type="number" min="0" max="1" required>
         </div>
 
         <div class="form-row">
             <label>Family History (0 = No, 1 = Yes)</label>
-            <input type="number" required>
+            <input type="number" min="0" max="1" required>
         </div>
 
         <button type="submit">Predict</button>
